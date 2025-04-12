@@ -26,6 +26,16 @@ const PredictionResults: React.FC<PredictionResultsProps> = ({
       .join(' ');
   };
 
+  // Define colors for the progress bars based on ranking
+  const getProgressColor = (index: number) => {
+    switch(index) {
+      case 0: return 'bg-green-500';
+      case 1: return 'bg-blue-500';
+      case 2: return 'bg-purple-500';
+      default: return 'bg-gray-500';
+    }
+  };
+
   return (
     <Card className="w-full animate-fade-in">
       <div className="p-6">
@@ -49,7 +59,7 @@ const PredictionResults: React.FC<PredictionResultsProps> = ({
               </div>
               <Progress 
                 value={prediction.score * 100} 
-                className={`h-2 ${index === 0 ? 'bg-muted' : 'bg-muted'}`}
+                className={`h-2 ${getProgressColor(index)}`}
               />
             </div>
           ))}

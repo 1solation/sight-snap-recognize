@@ -9,14 +9,14 @@ env.useBrowserCache = true;
 // Define models we support
 export const AVAILABLE_MODELS = {
   mobilenet: {
-    id: "onnx-community/mobilenetv4_conv_small.e2400_r224_in1k",
-    name: "MobileNetV4",
-    description: "Lightweight model for general image classification"
-  },
-  resnet: {
     id: "microsoft/resnet-50",
     name: "ResNet-50",
     description: "Powerful model for detailed image classification"
+  },
+  efficientnet: {
+    id: "google/efficientnet-b3",
+    name: "EfficientNet-B3",
+    description: "Balanced model for everyday objects and scenes"
   }
 };
 
