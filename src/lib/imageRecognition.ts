@@ -1,4 +1,3 @@
-
 import { pipeline, env } from '@huggingface/transformers';
 import type { ImageRecognitionResult } from './types';
 
@@ -9,14 +8,14 @@ env.useBrowserCache = true;
 // Define models we support
 export const AVAILABLE_MODELS = {
   mobilenet: {
-    id: "microsoft/resnet-50",
-    name: "ResNet-50",
-    description: "Powerful model for detailed image classification"
+    id: "Xenova/mobilenet-v2",
+    name: "MobileNet-v2",
+    description: "Lightweight model for general image classification"
   },
   efficientnet: {
-    id: "google/efficientnet-b3",
-    name: "EfficientNet-B3",
-    description: "Balanced model for everyday objects and scenes"
+    id: "Xenova/vit-base-patch16-224",
+    name: "ViT Base",
+    description: "Vision Transformer for accurate image recognition"
   }
 };
 
@@ -29,10 +28,7 @@ let classifierPromise: Promise<any> | null = null;
 const initializeClassifier = async (modelId: string = DEFAULT_MODEL) => {
   if (!classifierPromise) {
     console.log(`Initializing image classifier with model: ${modelId}`);
-    classifierPromise = pipeline('image-classification', modelId, {
-      // Use wasm instead of webgpu based on the error message
-      device: 'wasm'
-    });
+    classifierPromise = pipeline('image-classification', modelId);
   }
   return classifierPromise;
 };

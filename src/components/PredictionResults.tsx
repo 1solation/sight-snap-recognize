@@ -3,6 +3,8 @@ import React from 'react';
 import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import type { Prediction } from '@/lib/types';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Loader2 } from 'lucide-react';
 
 interface PredictionResultsProps {
   predictions: Prediction[];
