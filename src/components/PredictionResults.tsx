@@ -50,7 +50,6 @@ const PredictionResults: React.FC<PredictionResultsProps> = ({
               <Progress 
                 value={prediction.score * 100} 
                 className={`h-2 ${index === 0 ? 'bg-muted' : 'bg-muted'}`}
-                indicatorClassName={index === 0 ? 'bg-theme-purple' : 'bg-theme-teal'}
               />
             </div>
           ))}
