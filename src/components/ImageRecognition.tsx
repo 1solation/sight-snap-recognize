@@ -6,18 +6,22 @@ import ImageUploader from './ImageUploader';
 import PredictionResults from './PredictionResults';
 import { recognizeImage } from '@/lib/imageRecognition';
 import type { ImageRecognitionResult } from '@/lib/types';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { AlertTriangle } from 'lucide-react';
 
 const ImageRecognition = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [result, setResult] = useState<ImageRecognitionResult | null>(null);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
 
   const handleImageSelected = async (imageFile: File) => {
     try {
-      // Reset previous results
+      // Reset previous results and errors
       setResult(null);
+      setError(null);
       setSelectedImage(imageFile);
       
       // Create and display image preview
@@ -35,9 +39,11 @@ const ImageRecognition = () => {
       });
     } catch (error) {
       console.error('Error processing image:', error);
+      const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
+      setError(errorMessage);
       toast({
         title: "Error processing image",
-        description: error instanceof Error ? error.message : "Unknown error occurred",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
@@ -75,6 +81,15 @@ const ImageRecognition = () => {
         </div>
         
         <div>
+          {error && (
+            <Alert variant="destructive" className="mb-4">
+              <AlertTriangle className="h-4 w-4 mr-2" />
+              <AlertDescription>
+                {error}
+              </AlertDescription>
+            </Alert>
+          )}
+          
           {result && (
             <PredictionResults 
               predictions={result.predictions}

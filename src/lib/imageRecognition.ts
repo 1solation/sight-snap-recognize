@@ -1,3 +1,4 @@
+
 import { pipeline, env } from '@huggingface/transformers';
 import type { ImageRecognitionResult } from './types';
 
@@ -8,11 +9,11 @@ env.useBrowserCache = true;
 // Define models we support
 export const AVAILABLE_MODELS = {
   mobilenet: {
-    id: "Xenova/mobilenet-v2",
+    id: "Xenova/mobilenetv2_1.0_224",
     name: "MobileNet-v2",
     description: "Lightweight model for general image classification"
   },
-  efficientnet: {
+  vit: {
     id: "Xenova/vit-base-patch16-224",
     name: "ViT Base",
     description: "Vision Transformer for accurate image recognition"
@@ -28,7 +29,10 @@ let classifierPromise: Promise<any> | null = null;
 const initializeClassifier = async (modelId: string = DEFAULT_MODEL) => {
   if (!classifierPromise) {
     console.log(`Initializing image classifier with model: ${modelId}`);
-    classifierPromise = pipeline('image-classification', modelId);
+    classifierPromise = pipeline('image-classification', modelId, {
+      revision: 'main',
+      quantized: true // Use quantized model for better performance and lower memory usage
+    });
   }
   return classifierPromise;
 };
@@ -100,7 +104,12 @@ export const recognizeImage = async (
     };
   } catch (error) {
     console.error("Error during image recognition:", error);
-    throw new Error(`Image recognition failed: ${error instanceof Error ? error.message : String(error)}`);
+    // Add more detailed error message
+    const errorMessage = error instanceof Error ? 
+      `${error.message}${error.cause ? ` (${JSON.stringify(error.cause)})` : ''}` : 
+      String(error);
+    
+    throw new Error(`Image recognition failed: ${errorMessage}`);
   }
 };
 
